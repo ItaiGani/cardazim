@@ -14,14 +14,17 @@ def run_server(server_ip, server_port):
         msg_len = conn.recv(4)
         tup = struct.unpack("<I", msg_len)[0]
         while True:
-            data = conn.recv(4096)
+            data = conn.recv(4096)          # dont want to recv len of full msg, cause it can be really long
+                                            # No need to allocate so much memory, maybe define it as a function of length instead of fixed size
             if not data:
                  break
             from_client += data.decode()
-        print (f'From client: {from_client}')
+        print (f'Recieved data: {from_client}')
         conn.close()
-        print('client disconnected and shutdown')
-        return
+        if from_client == "close":      # was not mentioned in instruction, but pretty nnoying to use ctr + c t close every time
+            serv.close()
+            print("Server has been closed")
+            return
 
 def get_args():
     parser = argparse.ArgumentParser(description='setup server.')
@@ -38,7 +41,7 @@ def main():
     '''
     args = get_args()
     try:
-        set_server(args.server_ip, args.server_port)
+        run_server(args.server_ip, args.server_port)
     except Exception as error:
         print(f'ERROR: {error}')
         return 1
