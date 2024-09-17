@@ -1,10 +1,7 @@
 import argparse
 import sys
 import socket
-import struct
-import os
 import threading
-import time
 from connection import Connection
 
 
