@@ -2,22 +2,20 @@ import argparse
 import sys
 import socket
 import struct
+from connection import Connection
+
 
 ###########################################################
 ####################### YOUR CODE #########################
 ###########################################################
 
 
-def send_data(server_ip, server_port, data):
+def send_data(server_ip, server_port, data: str):
     '''
     Send data to server in address (server_ip, server_port).
     '''
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect((server_ip, server_port))
-
-    msg_header = struct.pack("<I", len(data))
-    client.send(msg_header + data.encode())
-    client.close()
+    with Connection.connect(server_ip, server_port) as client:
+        client.send_message(data)
 
 
 ###########################################################
@@ -43,7 +41,7 @@ def main():
     args = get_args()
     try:
         send_data(args.server_ip, args.server_port, args.data)
-        print('Done.')
+        print('Done')
     except Exception as error:
         print(f'ERROR: {error}')
         return 1
