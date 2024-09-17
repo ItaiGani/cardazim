@@ -5,19 +5,19 @@ import struct
 import os
 import threading
 import time
+from connection import Connection
 
 
 def handle_client(conn):
     from_client = ''
     msg_len = conn.recv(4)
-    tup = struct.unpack("<I", msg_len)[0]
+    tup = struct.unpack("<I", msg_len)[0]           # this is 1 item array
     while True:
         data = conn.recv(4096)          # dont want to recv len of full msg, cause it can be really long
                                         # No need to allocate so much memory, maybe define it as a function of length instead of fixed size
         if not data:
                 break
         from_client += data.decode()
-    time.sleep(5)
     print(f"current thread id = {threading.get_native_id()}")
     print (f'Recieved data: {from_client}')
     conn.close()
