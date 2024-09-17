@@ -8,18 +8,10 @@ import time
 from connection import Connection
 
 
-def handle_client(conn):
-    from_client = ''
-    msg_len = conn.recv(4)
-    tup = struct.unpack("<I", msg_len)[0]           # this is 1 item array
-    while True:
-        data = conn.recv(4096)          # dont want to recv len of full msg, cause it can be really long
-                                        # No need to allocate so much memory, maybe define it as a function of length instead of fixed size
-        if not data:
-                break
-        from_client += data.decode()
+def handle_client(conn: Connection):
+    message = conn.receive_message()
     print(f"current thread id = {threading.get_native_id()}")
-    print (f'Recieved data: {from_client}')
+    print (f'Recieved data: {message}')
     conn.close()
 
 def run_server(server_ip, server_port):
@@ -28,6 +20,7 @@ def run_server(server_ip, server_port):
     serv.listen(5)
     while True:
         conn, addr = serv.accept()
+        conn = Connection(conn)
         thread = threading.Thread(target=handle_client, args=(conn,))
         thread.start()
 

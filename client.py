@@ -14,12 +14,8 @@ def send_data(server_ip, server_port, data: str):
     '''
     Send data to server in address (server_ip, server_port).
     '''
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect((server_ip, server_port))
-
-    msg_header = struct.pack("<I", len(data))
-    client.send(msg_header + data.encode())
-    client.close()
+    with Connection.connect(server_ip, server_port) as client:
+        client.send_message(data)
 
 
 ###########################################################

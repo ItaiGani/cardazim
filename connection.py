@@ -27,12 +27,12 @@ class Connection():
         
     
     def __enter__(self):
-        self.logger("Entered Connection class")
+        self.logger("-----> Entered Connection class")
         return self
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         self.close()
-        self.logger("Existed Connection class")
+        self.logger("-----> Existed Connection class")
 # ------------------------------------------------------------------------------------------
 # ----------------- Private Methods --------------------------------------------------------
 # ------------------------------------------------------------------------------------------
@@ -76,21 +76,20 @@ class Connection():
         return Connection(sock)
     
 
-    def send_message(self, message: bytes):
+    def send_message(self, message: str):
         msg = Connection.__pack_message(message)
         self.sock.send(msg)
 
 
     def receive_message(self):
-        if self.__is_closed(self):
+        if self.__is_closed():
             raise ConnectionError
         else:
             from_client = ''
             header = self.__get_msg_header()
             expected_msg_leg = header[0]
             while True:
-                data = self.sock.recv(4096)     # I don't want to recv len of full msg, cause it can be really long
-                                                # No need to allocate so much memory, maybe define it as a function of length instead of fixed size
+                data = self.sock.recv(4096)    
                 if not data:
                     break
                 from_client += data.decode()
