@@ -1,22 +1,22 @@
 from PIL import Image
 from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad, unpad
 import hashlib
-import io
 
 
 
 class CryptImage():
 
-    def __init__(self, path):
-        self.image = Image.open(path)
+    def __init__(self, image: Image = None):
+        self.image = image
         self.key_hash = None
         self.nonce = b'arazim'
 
 
     @classmethod
     def create_from_path(cls, path):
-        return CryptImage(path)
+        im = Image.open(path)
+        im = im.convert("RGB")
+        return CryptImage(im)
     
 
     def encrypt(self, key: str) -> None:
@@ -28,7 +28,6 @@ class CryptImage():
         encrypted_data = cipher.encrypt(img_binary)
         
         self.image = Image.frombytes(self.image.mode, self.image.size, encrypted_data)
-        self.image.save("abc.png")
 
 
     def decrypt(self, key: str):
@@ -37,13 +36,12 @@ class CryptImage():
             print("------------Wrong key-------------")
             return
         
-        
         encrypted_data = self.image.tobytes()
         cipher = AES.new(encryption_key, AES.MODE_EAX, self.nonce)
         decrypted_data = cipher.decrypt(encrypted_data)
-        # decrypted_data = unpad(decrypted_data, AES.block_size)
-        # decrypted_image = Image.open(io.BytesIO(decrypted_data))
-        # decrypted_image.save("abc.png", format=decrypted_image.format)
         self.image = Image.frombytes(self.image.mode, self.image.size, decrypted_data)
-        self.image.save("abc.png")
         self.key_hash = None
+
+    
+    def save(self, path):
+        self.image.save(path)

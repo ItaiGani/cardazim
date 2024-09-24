@@ -2,8 +2,10 @@ import argparse
 import sys
 import socket
 import struct
+import time
 from connection import Connection
-
+from crypt_image import CryptImage
+from card import Card
 
 ###########################################################
 ####################### YOUR CODE #########################
