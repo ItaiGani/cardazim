@@ -37,10 +37,10 @@ class Connection():
 # ----------------- Private Methods --------------------------------------------------------
 # ------------------------------------------------------------------------------------------
     @staticmethod
-    def __pack_message(message: str) -> bytes:
+    def __pack_message(message: bytes) -> bytes:
         msg_header = struct.pack("<I", len(message))
-        return msg_header + message.encode()
-    
+        return msg_header + message
+
     """
     @Pre: socket is open
     """
@@ -76,7 +76,7 @@ class Connection():
         return Connection(sock)
     
 
-    def send_message(self, message: str):
+    def send_message(self, message: bytes):
         msg = Connection.__pack_message(message)
         self.sock.send(msg)
 
@@ -85,14 +85,14 @@ class Connection():
         if self.__is_closed():
             raise ConnectionError
         else:
-            from_client = ''
+            from_client = b''
             header = self.__get_msg_header()
             expected_msg_leg = header[0]
             while True:
                 data = self.sock.recv(4096)    
                 if not data:
                     break
-                from_client += data.decode()
+                from_client += data
             if len(from_client) != expected_msg_leg:
                 self.logger("Message read from client is in different length than the header value")
             return from_client

@@ -1,5 +1,6 @@
 Networking.zip
 infinity
-images
+/images
 /.vscode
 /__pycache__
+/venv

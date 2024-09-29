@@ -1,17 +1,16 @@
 import argparse
 import sys
 import socket
-import struct
-import os
 import threading
-import time
 from connection import Connection
-
+from card import Card
 
 def handle_client(conn: Connection):
-    message = conn.receive_message()
-    print(f"current thread id = {threading.get_native_id()}")
-    print (f'Recieved data: {message}')
+    data = conn.receive_message()
+    print(f"Current thread id = {threading.get_native_id()}")
+    card = Card.deserialize(data)
+    card.image.save("/images/test.jpg")
+    print(card)
     conn.close()
 
 def run_server(server_ip, server_port):
