@@ -66,17 +66,12 @@ class Card:
         crypt_image.key_hash = data[ri:ri+32:]
         ri += 32
 
-        print(len("what animal is in the picture"))
-        print(ri)
-        print(len(data))
         riddle_length = struct.unpack("<I", data[ri:ri+4:])[0]
         ri += 4
         #riddle = data[ri:ri+riddle_length:].decode()                      # X
         ri += riddle_length         # redundant, but for the sake of order I still write this
                                     # if correct ri (Read Index) is now equal to len(data)
         riddle =  "what animal is in the picture"
-        print(riddle_length)
-        print(ri)
         
 
         return Card(name, creator, crypt_image, riddle, None)

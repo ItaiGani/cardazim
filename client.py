@@ -1,10 +1,6 @@
 import argparse
 import sys
-import socket
-import struct
-import time
 from connection import Connection
-from crypt_image import CryptImage
 from card import Card
 
 ###########################################################
@@ -12,12 +8,15 @@ from card import Card
 ###########################################################
 
 
-def send_data(server_ip, server_port, data: str):
+def send_data(server_ip, server_port, data: tuple[str]):
     '''
     Send data to server in address (server_ip, server_port).
     '''
     with Connection.connect(server_ip, server_port) as client:
-        client.send_message(data)
+        card = Card.create_from_path(data[0], data[1], data[2], data[3], data[4])
+        card.image.encrypt("securepassword")
+        card_data = card.serialize()
+        client.send_message(card_data)
 
 
 ###########################################################
@@ -31,8 +30,16 @@ def get_args():
                         help='the server\'s ip')
     parser.add_argument('server_port', type=int,
                         help='the server\'s port')
-    parser.add_argument('data', type=str,
-                        help='the data')
+    parser.add_argument('name', type=str,
+                        help='card name')
+    parser.add_argument('creator', type=str,
+                    help='card creator')
+    parser.add_argument('riddle', type=str,
+                    help='card riddle')
+    parser.add_argument('solution', type=str,
+                        help='card solution')
+    parser.add_argument('path', type=str,
+                        help='card image path')
     return parser.parse_args()
 
 
@@ -42,8 +49,9 @@ def main():
     '''
     args = get_args()
     try:
-        send_data(args.server_ip, args.server_port, args.data)
-        print('Done')
+        data = (args.name, args.creator, args.path, args.riddle, args.solution)
+        send_data(args.server_ip, args.server_port, data)
+        print("Done. Sent all data to server")
     except Exception as error:
         print(f'ERROR: {error}')
         return 1
