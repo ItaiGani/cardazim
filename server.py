@@ -9,7 +9,7 @@ def handle_client(conn: Connection):
     data = conn.receive_message()
     print(f"Current thread id = {threading.get_native_id()}")
     card = Card.deserialize(data)
-    card.image.save("/images/test.jpg")
+    card.image.save("/images/test.png")
     print(card)
     conn.close()
 
