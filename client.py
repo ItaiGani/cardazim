@@ -7,6 +7,11 @@ from card import Card
 ####################### YOUR CODE #########################
 ###########################################################
 
+def validate_arguments(data) -> bool:
+    if "_" in data[1]:   # I asume in saver in getCreators that '_' is the seperator between creator and card name
+        print("underscore ('_') is invalid character in creator name")
+        return False
+    return True
 
 def send_data(server_ip, server_port, data: tuple[str]):
     '''
@@ -50,6 +55,8 @@ def main():
     args = get_args()
     try:
         data = (args.name, args.creator, args.path, args.riddle, args.solution)
+        if not validate_arguments(data):            
+            exit(1)
         send_data(args.server_ip, args.server_port, data)
         print("Done. Sent all data to server")
     except Exception as error:

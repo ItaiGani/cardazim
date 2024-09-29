@@ -7,24 +7,26 @@ from card import Card
 from card_manager import CardManager
 
 
-def handle_client(conn: Connection):
+def handle_client(conn: Connection, manager: CardManager):
     data = conn.receive_message()
     print(f"Current thread id = {threading.get_native_id()}")
     card = Card.deserialize(data)
-    manager = CardManager()
-    manager.save(card, "images/unsolved")
-    print(manager.load("images/unsolved", "itai_light"))
+    manager.save(card)
+    print(manager.getCreatorCards("itai"))
     conn.close()
 
+
 def run_server(server_ip, server_port):
+    manager = CardManager("metadata_cards", "images")
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serv.bind((server_ip, server_port))
     serv.listen(5)
     while True:
         conn, addr = serv.accept()
         conn = Connection(conn)
-        thread = threading.Thread(target=handle_client, args=(conn,))
+        thread = threading.Thread(target=handle_client, args=(conn, manager))
         thread.start()
+
 
 def get_args():
     parser = argparse.ArgumentParser(description='setup server.')
