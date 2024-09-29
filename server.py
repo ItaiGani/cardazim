@@ -4,13 +4,16 @@ import socket
 import threading
 from connection import Connection
 from card import Card
+from card_manager import CardManager
+
 
 def handle_client(conn: Connection):
     data = conn.receive_message()
     print(f"Current thread id = {threading.get_native_id()}")
     card = Card.deserialize(data)
-    card.image.save("/images/test.png")
-    print(card)
+    manager = CardManager()
+    manager.save(card, "images/unsolved")
+    print(manager.load("images/unsolved", "itai_light"))
     conn.close()
 
 def run_server(server_ip, server_port):
