@@ -24,7 +24,7 @@ class fsDriver(CardDriver):
             "path": image_path
         }
         json_object = json.dumps(data, indent=4)
-        with open(f"{self.dir}/{card.creator}_{card.name}.json", "w") as outfile:
+        with open(f"{self.dir}/{card.generate_identifier()}.json", "w") as outfile:
             outfile.write(json_object)
 
 
@@ -32,8 +32,7 @@ class fsDriver(CardDriver):
         if os.path.isfile(self.dir + "/" + identifier + ".json"):
             with open(self.dir + "/" + identifier + ".json") as file:
                 data = json.load(file)
-                card = Card.create_from_path(data["name"], data["creator"], data["path"], data["riddle"], data["solution"])
-                return card
+                return Card.create_from_path(data["name"], data["creator"], data["path"], data["riddle"], data["solution"])
         else:
             print("Card does not exist.")
             exit(1)

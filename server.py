@@ -12,12 +12,11 @@ def handle_client(conn: Connection, manager: CardManager):
     print(f"Current thread id = {threading.get_native_id()}")
     card = Card.deserialize(data)
     manager.save(card)
-    print(manager.getCreatorCards("itai"))
     conn.close()
 
 
-def run_server(server_ip, server_port):
-    manager = CardManager("metadata_cards", "images")
+def run_server(server_ip, server_port, database):
+    manager = CardManager(database, "images")
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serv.bind((server_ip, server_port))
     serv.listen(5)
@@ -34,6 +33,8 @@ def get_args():
                         help='the server\'s ip')
     parser.add_argument('server_port', type=int,
                         help='the server\'s port')
+    parser.add_argument('database',type=str,
+                        help='url containing database type and its path')
     return parser.parse_args()
 
 
@@ -43,7 +44,7 @@ def main():
     '''
     args = get_args()
     try:
-        run_server(args.server_ip, args.server_port)
+        run_server(args.server_ip, args.server_port, args.database)
     except Exception as error:
         print(f'ERROR: {error}')
         return 1

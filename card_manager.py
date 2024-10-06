@@ -1,7 +1,9 @@
 from card import Card
 from CardDriver import CardDriver
 from fsDriver import fsDriver
+from SQLDriver import SQLDriver
 import pathlib
+from furl import furl
 
 
 class CardManager:
@@ -19,7 +21,7 @@ class CardManager:
 
     def save(self, card: Card):
         is_solved_dir = "unsolved" if card.solution == None else "solved"
-        image_path = f"{self.images_dir}/{is_solved_dir}/{CardManager.generate_identifier(card)}.png"
+        image_path = f"{self.images_dir}/{is_solved_dir}/{card.generate_identifier()}.png"
         card.image.save(image_path)  
         self.driver.save(card, image_path)
         print(f"Saved card and saved card image to path ‘{image_path}’.")
@@ -35,14 +37,14 @@ class CardManager:
 
     def getCreatorCards(self, creator: str):
         return self.driver.getCreatorCards(creator)
-
- 
-    @classmethod
-    def generate_identifier(cls, card: Card) -> str:
-        return card.creator + "_" + card.name
     
 
     @classmethod
     def get_driver(cls, database_url: str) -> CardDriver:
         """parse url and return which driver we should use"""
-        return fsDriver("/home/pogo-arazim/Documents/arazim0/cardazim/metadata_cards")
+        f = furl(database_url)
+        print(f.scheme, f.netloc)
+        if f.scheme == "sql":
+            return SQLDriver(f.netloc)
+        elif f.scheme == "filesystem":
+            return fsDriver(f.netloc)

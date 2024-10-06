@@ -5,3 +5,4 @@ infinity
 /.vscode
 /__pycache__
 /venv
+*.db
