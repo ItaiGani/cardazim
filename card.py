@@ -75,3 +75,7 @@ class Card:
         
 
         return Card(name, creator, crypt_image, riddle, None)
+    
+
+    def generate_identifier(self) -> str:
+        return self.creator + "_" + self.name
