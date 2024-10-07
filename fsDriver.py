@@ -8,11 +8,10 @@ import os
 class fsDriver(CardDriver):
     
     def __init__(self, dir: str):
-        self.dir = dir
+        self.dir = pathlib.Path(dir)
 
         # making the dir
-        p = pathlib.Path(self.dir)
-        p.mkdir(parents=True, exist_ok=True)
+        self.dir.mkdir(parents=True, exist_ok=True)
 
 
     def save(self, card: Card, image_path):
@@ -24,13 +23,13 @@ class fsDriver(CardDriver):
             "path": image_path
         }
         json_object = json.dumps(data, indent=4)
-        with open(f"{self.dir}/{card.generate_identifier()}.json", "w") as outfile:
+        with open(self.dir / f"{card.generate_identifier()}.json", "w") as outfile:
             outfile.write(json_object)
 
 
     def load(self, identifier: str) -> Card:
-        if os.path.isfile(self.dir + "/" + identifier + ".json"):
-            with open(self.dir + "/" + identifier + ".json") as file:
+        if os.path.isfile(self.dir / f"{identifier}.json"):
+            with open(self.dir / f"{identifier}.json") as file:
                 data = json.load(file)
                 return Card.create_from_path(data["name"], data["creator"], data["path"], data["riddle"], data["solution"])
         else:
