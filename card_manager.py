@@ -43,7 +43,6 @@ class CardManager:
     def get_driver(cls, database_url: str) -> CardDriver:
         """parse url and return which driver we should use"""
         f = furl(database_url)
-        print(f.scheme, f.netloc)
         if f.scheme == "sql":
             return SQLDriver(f.netloc)
         elif f.scheme == "filesystem":
