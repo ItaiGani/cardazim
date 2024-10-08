@@ -33,11 +33,11 @@ class CardManager:
         return self.driver.load(identifier)
         
 
-    def getCreators(self):
+    def getCreators(self) -> list[str]:
         return self.driver.getCreators()
     
 
-    def getCreatorCards(self, creator: str):
+    def getCreatorCards(self, creator: str) -> list[Card]:
         return self.driver.getCreatorCards(creator)
     
 

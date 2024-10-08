@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cardazim</title>
+    </head>
+
+    <body>
+
+        <h1>{{header}}</h1>
+
+        <ul id="creators">
+            <pre>
+                {% for card in cards %}
+                    <li style="font-size: x-large;">{{card}}</li>
+                {% endfor %}
+            </pre>
+        </ul>
+
+    </body>
+</html> 
