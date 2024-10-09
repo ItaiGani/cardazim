@@ -8,9 +8,12 @@ from card import Card
 ###########################################################
 
 def validate_arguments(data) -> bool:
-    if "_" in data[1]:   # I asume in saver in getCreators that '_' is the seperator between creator and card name
+    if "_" in data[1]:   # I assume in saver in getCreators that '_' is the seperator between creator and card name
         print("underscore ('_') is invalid character in creator name")
         return False
+    if "_" in data[0]:   
+        print("underscore ('_') is invalid character in card name")
+        return False   
     return True
 
 def send_data(server_ip, server_port, data: tuple[str]):

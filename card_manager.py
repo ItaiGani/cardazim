@@ -22,8 +22,7 @@ class CardManager:
 
 
     def save(self, card: Card):
-        is_solved_dir = "unsolved" if card.solution == None else "solved"
-        image_path = self.images_dir / f"{is_solved_dir}/{card.generate_identifier()}.png"
+        image_path = self.get_card_impath(card)
         card.image.save(image_path)  
         self.driver.save(card, os.fspath(image_path))
         print(f"Saved card and image successfully.")
@@ -40,6 +39,15 @@ class CardManager:
     def getCreatorCards(self, creator: str) -> list[Card]:
         return self.driver.getCreatorCards(creator)
     
+
+    def getCards(self) -> list[Card]:
+        return self.driver.getCards()
+
+
+    def get_card_impath(self, card: Card) -> str:
+        is_solved_dir = "unsolved" if card.solution == None else "solved"
+        return self.images_dir / f"{is_solved_dir}/{card.generate_identifier()}.png"
+
 
     @classmethod
     def get_driver(cls, database_url: str) -> CardDriver:

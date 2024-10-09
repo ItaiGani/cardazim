@@ -61,3 +61,12 @@ class SQLDriver(CardDriver):
         cur.close()
         self.lock.release()
         return [Card.create_from_path(data[1], data[2], data[5], data[3], data[4]) for data in cards]
+    
+
+    def getCards(self):
+        self.lock.acquire()
+        cur = self.con.cursor()
+        cards = cur.execute(f"""SELECT * FROM {table_name}""").fetchall()
+        cur.close()
+        self.lock.release()
+        return [Card.create_from_path(data[1], data[2], data[5], data[3], data[4]) for data in cards]

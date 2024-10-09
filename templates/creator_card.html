@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cardazim</title>
+    </head>
+
+    <body>
+
+        <h1>{{card.name}}</h1>
+
+        <ul id="card">
+            <li>Created by: {{card.creator}}</li>
+            <li>Question: {{card.riddle}}?</li>
+
+            {% if card.solution %}
+            <li>Solution {{card.solution}}</li>
+            {% endif %}
+        </ul>
+                                                                <!--intense-->
+        
+        <img src="https://www.w3schools.com/images/lamp.jpg" alt="Lamp" width="32" height="32">
+        <img src = "file:///home/pogo-arazim/Documents/arazim0/cardazim/images/unsolved/itai_light.png" alt = "error" width = "300", height = "200"> 
+    </body>
+</html> 

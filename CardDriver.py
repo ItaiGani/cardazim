@@ -18,3 +18,7 @@ class CardDriver(ABC):
     @abstractmethod
     def getCreatorCards():
         ...
+
+    @abstractmethod
+    def getCards():
+        ...

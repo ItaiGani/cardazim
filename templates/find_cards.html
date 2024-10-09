@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cardazim</title>
+    </head>
+
+    <body>
+
+        <h1>Find cards</h1>
+        <h3>name = &lt{{ name }}&gt<br/>creator = &lt{{ creator }}&gt<br/>riddle = &lt{{ riddle }}&gt</h3>
+
+        <ul id="creators">
+            <pre>
+                {% for card in cards %}
+                    <li style="font-size: x-large;">{{card}}</li>
+                {% endfor %}
+            </pre>
+        </ul>
+
+    </body>
+</html> 

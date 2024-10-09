@@ -45,3 +45,8 @@ class fsDriver(CardDriver):
     def getCreatorCards(self, creator: str) -> list[Card]:
         cards = os.listdir(self.dir)
         return [self.load(card[:-5:]) for card in cards if creator == card.split("_")[0]]
+    
+    
+    def getCards(self) -> list[Card]:
+        cards = os.listdir(self.dir)
+        return [self.load(card[:-5:]) for card in cards]
